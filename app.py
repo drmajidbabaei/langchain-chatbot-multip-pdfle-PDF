@@ -1,13 +1,16 @@
-import streamlit as st
+#!pip install streamlit python-dotenv PyPDF2 transformers langchain langchain-community bitsandbytes accelerate huggingface-hub
+
+import streamlit as st # Streamlit lets you transform Python scripts into interactive web apps in minutes
 from dotenv import load_dotenv
 from PyPDF2 import PdfReader
 from langchain.text_splitter import CharacterTextSplitter
-from langchain.embeddings import OpenAIEmbeddings, HuggingFaceInstructEmbeddings
+from langchain.embeddings import HuggingFaceInstructEmbeddings, HuggingFaceEmbeddings
 from langchain.vectorstores import FAISS
 from langchain.memory import ConversationBufferMemory
 from langchain.chains import ConversationalRetrievalChain
-from langchain.chat_models import ChatOpenAI
+from langchain.chat_models import ChatHuggingFace
 from htmlTemplates import bot_template, user_template, css
+from langchain.llms import HuggingFaceHub
 
 from transformers import pipeline
 
@@ -36,13 +39,10 @@ def get_chunk_text(text):
 
 def get_vector_store(text_chunks):
     
-    # For OpenAI Embeddings
-    
-    embeddings = OpenAIEmbeddings()
     
     # For Huggingface Embeddings
 
-    # embeddings = HuggingFaceInstructEmbeddings(model_name = "hkunlp/instructor-xl")
+    embeddings = HuggingFaceInstructEmbeddings(model_name = "hkunlp/instructor-xl")
 
     vectorstore = FAISS.from_texts(texts = text_chunks, embedding = embeddings)
     
@@ -50,13 +50,10 @@ def get_vector_store(text_chunks):
 
 def get_conversation_chain(vector_store):
     
-    # OpenAI Model
-
-    llm = ChatOpenAI()
 
     # HuggingFace Model
 
-    # llm = HuggingFaceHub(repo_id="google/flan-t5-xxl", model_kwargs={"temperature":0.5, "max_length":512})
+    llm = HuggingFaceHub(repo_id="google/flan-t5-xxl", model_kwargs={"temperature":0.5, "max_length":512})
 
     memory = ConversationBufferMemory(memory_key='chat_history', return_messages=True)
 
