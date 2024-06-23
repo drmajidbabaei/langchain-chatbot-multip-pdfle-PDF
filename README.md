@@ -20,15 +20,14 @@ To install and run the Langchain Chatbot, follow these steps:
 
 Clone the repository 
 ```
-git clone https://github.com/Abdullahw72/langchain-chatbot-multiple-PDF
+git clone <REPO_ADDRESS>
 ```
 
 Create a Virtual Environment
 ```bash
 pip install virtualenv
-python<version> -m venv <virtual-environment-name>
+python<version> -m venv .
 <virtual-environment-name>\Scripts\activate
-
 ```
 Install the dependencies using requirements.txt
 
